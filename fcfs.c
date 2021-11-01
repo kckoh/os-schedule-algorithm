@@ -14,57 +14,6 @@ struct pcb{
 enum categoryTypes{kneeSurgery, backSurgery,legSurgery,ankleSurgery, brainSurgery, eyeSurgery};
 
 
-// Function to find the waiting time for all
-// processes
-void calculateWaitingTime(int processes[], int n,
-						int bt[], int wt[])
-{
-	// first process waiting time = 0
-	wt[0] = 0;
-	// calculating waiting time
-	for (int i = 1; i < n ; i++ )
-		wt[i] = bt[i-1] + wt[i-1];
-
-}
-
-
-
-//Function to calculate 
-// (int processes[], int n, int bt[],char **categories,int priorities[])
-void printProcesses(struct pcb pList[],  int n)
-{
-	int processes[8];
-	int bt[8];
-	char *categories[8];
-	int priorities[8];
-	int wt[n], total_wt = 0;
-
-	for (int i = 0; i < n ; i++){
-		processes[i] = pList[i].process;
-		bt[i] = pList[i].burst_time;
-		categories[i] = pList[i].categories;
-		priorities[i] = pList[i].priorities;
-	}
-
-
-	calculateWaitingTime(processes, n, bt, wt);
-
-	printf("Processes Burst time Waiting time categories     priorities\n");
-
-	// around time
-	for (int i=0; i<n; i++)
-	{
-		total_wt = total_wt + wt[i];
-		
-		printf("%d  ",(i+1));
-		printf("\t  %d", bt[i] );
-		printf("\t\t%d",wt[i] );
-        printf("\t  %s",categories[i]);
-		printf("\t  %d\n",priorities[i]);
-	}
-}
-
-
 int main()
 {
 	//basic configurations
@@ -80,7 +29,6 @@ int main()
                              categories[ankleSurgery], categories[brainSurgery],
                              categories[eyeSurgery], categories[backSurgery]};
 
-
 	// assigning to the struct lists
 	for (int i = 0; i < n ; i++){
 		pList[i].process = processes[i];
@@ -91,16 +39,12 @@ int main()
 	}
 
 
-	printf("First Set============================");
+	printf("First Set======================================================\n");
 	printProcesses(pList,n);
 
 
 	// second Set
 	n = sizeof processes / sizeof processes[0];
-	
-	for (int i = 0; i < n ; i++){
-		
-	}
 
 	int burst_time2[8] = {8,7,1,2,2,4,2,7};
 	int priorities2[8] = {5,5,1,2,2,3,1,4};
@@ -120,7 +64,7 @@ int main()
 	}
 
 
-	printf("Second Set============================");
+	printf("Second Set======================================================\n");
 	printProcesses(pList,n);
 
 
@@ -148,9 +92,57 @@ int main()
 	}
 
 
-	printf("Third Set============================");
+	printf("Third Set======================================================\n");
 	printProcesses(pList,n);
 
 
 	return 0;
+}
+
+
+//calculate waiting time
+void calculateWaitingTime(int processes[], int n,
+						int burst_time[], int waiting_time[])
+{
+	// first waiting time to be zero
+	waiting_time[0] = 0;
+	// calculating waiting time
+	for (int i = 1; i < n ; i++ )
+		waiting_time[i] = burst_time[i-1] + waiting_time[i-1];
+
+}
+
+
+
+void printProcesses(struct pcb pList[],  int n)
+{
+	int processes[8];
+	int burst_time[8];
+	char *categories[8];
+	int priorities[8];
+	int waiting_time[n], total_waiting_time = 0;
+
+	for (int i = 0; i < n ; i++){
+		processes[i] = pList[i].process;
+		burst_time[i] = pList[i].burst_time;
+		categories[i] = pList[i].categories;
+		priorities[i] = pList[i].priorities;
+	}
+
+
+	calculateWaitingTime(processes, n, burst_time, waiting_time);
+
+	printf("Processes Burst time Waiting time categories     priorities\n");
+
+	
+	for (int i=0; i<n; i++)
+	{
+		total_waiting_time = total_waiting_time + waiting_time[i];
+		
+		printf("%d  ",processes[i]);
+		printf("\t  %d", burst_time[i] );
+		printf("\t\t%d",waiting_time[i] );
+        printf("\t  %s",categories[i]);
+		printf("\t  %d\n",priorities[i]);
+	}
 }
